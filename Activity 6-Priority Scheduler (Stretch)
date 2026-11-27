@@ -1,0 +1,42 @@
+
+import heapq
+
+class PriorityScheduler:
+    def __init__(self):
+        self.queue = []
+        self.counter = 0
+
+    def add_job(self, job, priority):
+        # Negative priority creates a max-priority queue
+        heapq.heappush(
+            self.queue,
+            (-priority, self.counter, job)
+        )
+        self.counter += 1
+
+    def release_next(self):
+        if not self.queue:
+            return None
+
+        priority, order, job = heapq.heappop(self.queue)
+        return job
+
+    def release_all(self):
+        release_order = []
+
+        while self.queue:
+            job = self.release_next()
+            release_order.append(job)
+
+        return release_order
+
+
+# Testing
+scheduler = PriorityScheduler()
+
+scheduler.add_job("Job A", 2)
+scheduler.add_job("Job B", 5)
+scheduler.add_job("Job C", 3)
+scheduler.add_job("Job D", 5)
+
+print("Release Order:", scheduler.release_all())
