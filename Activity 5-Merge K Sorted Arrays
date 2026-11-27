@@ -1,0 +1,44 @@
+
+import heapq
+
+def merge_k_sorted_arrays(arrays):
+    min_heap = []
+
+    # Insert the first element of each array
+    for i, arr in enumerate(arrays):
+        if arr:
+            heapq.heappush(min_heap, (arr[0], i, 0))
+
+    result = []
+
+    while min_heap:
+        value, array_index, element_index = heapq.heappop(min_heap)
+
+        result.append(value)
+
+        next_index = element_index + 1
+
+        if next_index < len(arrays[array_index]):
+            next_value = arrays[array_index][next_index]
+
+            heapq.heappush(
+                min_heap,
+                (next_value, array_index, next_index)
+            )
+
+    return result
+
+
+# Testing
+arrays = [
+    [1, 4, 7],
+    [2, 5],
+    [3, 6, 8, 9]
+]
+
+merged = merge_k_sorted_arrays(arrays)
+
+print("Merged Array:", merged)
+print("Fully Sorted:", merged == sorted(
+    value for arr in arrays for value in arr
+))
